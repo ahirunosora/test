@@ -40,6 +40,7 @@ int main() {
 	char T[] = { "mississippi" };
 	int SA[n];
 	int *sa;
+	int a;
 	sa = GetSA(T,SA);
 	printf("T:%s\nSA:", T);
 	for (int i = 0; i<n; i++) {
