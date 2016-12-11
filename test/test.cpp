@@ -6,7 +6,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define n 12
 
 int compare(const void *arg1, const void *arg2)
 {
@@ -16,11 +15,11 @@ int compare(const void *arg1, const void *arg2)
 	return strcmp(left_char, right_char);
 }
 
-void GetSA(const char *T, int *SA) {
+void GetSA(const char *T, int *SA,long n) {
 	char *p;
-	char *str = (char *)malloc(2 * n);
-	//char **suffix = (char **)malloc(n+1);
-	char *suffix[n];
+	char *str = (char *)malloc(2 * (size_t)n * sizeof(char));
+	char **suffix = (char **)malloc(n);
+	//char *suffix[n];
 	int j = 0;
 	int k = 0;
 	for (int i = 0; i < n; i++)str[k++] = T[i];
@@ -38,11 +37,28 @@ void GetSA(const char *T, int *SA) {
 }
 
 int main() {
-	char T[] = { "mississippi$" };
-	int SA[n];
+	//char T[] = { "mississippi$" };
+	char *T;
+	int *SA;
+	FILE *fp;
+	errno_t err;
+	const char *fname = "C:\\Users\\aredayone\\Documents\\sample\\sample.txt";
+	long n;
+	if ((err = fopen_s(&fp, fname, "r")) != 0)printf("error\n"); //exit(1);
+	if (fseek(fp, 0, SEEK_END) == 0) {
+		n = ftell(fp);
+		rewind(fp);
+	}
+	T = (char *)malloc((size_t)n * sizeof(char)+1);
+	SA = (int *)malloc((size_t)n * sizeof(int));
+	if ((T == NULL) || (SA == NULL))printf("error\n");//exit(EXIT_FAILURE);
+	fread(T, sizeof(char), (size_t)n, fp);
+	T[n] = NULL;
+	fclose(fp);
 	int i;
-	GetSA(T,SA);
-	char BWT[n];
+	GetSA(T,SA,n);
+	char* BWT;
+	BWT = (char *)malloc((size_t)n * sizeof(char)+1);
 	for (i = 0; i < n; i++) {
 		if (SA[i] != 0) {
 			BWT[i] = T[SA[i] - 1];
@@ -51,8 +67,8 @@ int main() {
 			BWT[i] = '$';
 		}
 	}
-	
-	/*printf("T  :%s\nSA :", T);
+	BWT[n] = NULL;
+	printf("T  :%s\nSA :", T);
 	for (i = 0; i<n; i++) {
 		printf("%2d", SA[i]);
 	}
@@ -60,8 +76,10 @@ int main() {
 	for (i = 0; i<n; i++) {
 		printf("%2c", BWT[i]);
 	}
-	printf("\n");*/
-
+	printf("\n");
+	free(T);
+	free(SA);
+	free(BWT);
 	return 0;
 }
 
