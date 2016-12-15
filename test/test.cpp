@@ -75,7 +75,7 @@ int main() {
 	FILE *fp;
 	errno_t err;
 	int i = 0;
-	const char *fname = "C:\\Users\\aredayone\\Desktop\\Œ¤‹†\\e_list1.txt";
+	const char *fname = "e_list1.txt";
 	long n;
 	if ((err = fopen_s(&fp, fname, "r")) != 0)exit(1);
 	/*if (fseek(fp, 0, SEEK_END) == 0) {
